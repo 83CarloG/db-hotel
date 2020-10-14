@@ -67,6 +67,20 @@ WHERE stanze.floor = 1;
 
 Prendi i dati di fatturazione per la prenotazione con id=7
 
-
+SELECT prenotazioni.id, `name`, `lastname`, `address`, `room_number`, `price`
+FROM `pagamenti`
+INNER JOIN `prenotazioni`
+ON pagamenti.prenotazione_id = prenotazioni.id
+INNER JOIN `stanze`
+ON prenotazioni.stanza_id = stanze.id
+INNER JOIN `paganti`
+ON pagamenti.pagante_id = paganti.id
+WHERE pagamenti.prenotazione_id = 7;
 
 Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
+
+SELECT stanze.room_number 
+FROM `prenotazioni`
+RIGHT JOIN `stanze`
+ON prenotazioni.stanza_id = stanze.id
+WHERE prenotazioni.id IS NULL;
