@@ -1,12 +1,34 @@
 Group by
 Conta gli ospiti raggruppandoli per anno di nascita
 
-#SELECT COUNT(id) AS 'Ospiti', DATE_FORMAT(`date_of_birth`, '%Y') AS 'Anno' FROM `ospiti` GROUP BY DATE_FORMAT(`date_of_birth`, '%Y');
+SELECT COUNT(id) AS 'Ospiti', DATE_FORMAT(`date_of_birth`, '%Y') AS 'Anno'
+FROM `ospiti`
+GROUP BY DATE_FORMAT(`date_of_birth`, '%Y');
 
 Somma i prezzi dei pagamenti raggruppandoli per status
+
+SELECT `status`, SUM(price)
+FROM `pagamenti`
+GROUP BY `status`;
+
 Conta quante volte è stata prenotata ogni stanza
+
+SELECT `stanza_id`, COUNT(stanza_id) AS 'numero prenotazioni'
+FROM `prenotazioni`
+GROUP BY `stanza_id`;
+
 Fai una analisi per vedere se ci sono ore in cui le prenotazioni sono più frequenti
+
+SELECT DATE_FORMAT(`created_at`, '%H') AS 'Ora', COUNT(DATE_FORMAT(`created_at`, '%H')) AS 'n. prenotazione'
+FROM `prenotazioni`
+GROUP BY DATE_FORMAT(`created_at`, '%H');
+
 Quante prenotazioni ha fatto l’ospite che ha fatto più prenotazioni?
+
+SELECT `pagante_id` AS 'ID Pagante', COUNT(pagante_id) AS 'Numero prenotazioni'
+FROM `pagamenti`
+GROUP BY `pagante_id`;
+
 Join
 Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
 Stampare tutti gli ospiti per ogni prenotazione
