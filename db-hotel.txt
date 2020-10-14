@@ -18,7 +18,7 @@ WHERE `date_of_birth` <= '2000-10-13';
 //2
 SELECT *
 FROM `ospiti`
-WHERE DATE_SUB(DATE(NOW()), INTERVAL 20 YEAR) > `date_of_birth`;
+WHERE DATE_SUB(CURRENT_DATE, INTERVAL 20 YEAR) > `date_of_birth`;
 
 Seleziona tutti gli ospiti il cui nome inizia con la D
 
