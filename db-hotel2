@@ -49,21 +49,31 @@ ORDER BY `ospiti`.`lastname` ASC;
 
 Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazioni fatte a Maggio 2018
 
-SELECT `prenotazione_id`, `status`, `name`, `lastname`, `price`, pagamenti.updated_at FROM `pagamenti`
+SELECT pagamenti.prenotazione_id AS 'Numero prenotazione',
+`status`,
+paganti.name AS 'Nome pagante',
+paganti.lastname AS 'Cognome pagante',
+`price`,
+prenotazioni.updated_at 'Data pagamento',
+ospiti.name AS 'Nome Ospite',
+ospiti.lastname AS 'Cognome Ospite'
+FROM `pagamenti`
 INNER JOIN `paganti` ON pagamenti.pagante_id = paganti.id
 INNER JOIN `prenotazioni` ON pagamenti.prenotazione_id = prenotazioni.id
-WHERE `status` = 'accepted' AND pagamenti.updated_at BETWEEN '2018-05-01' AND '2018-05-31'
-ORDER BY `paganti`.`name` ASC;
+INNER JOIN `prenotazioni_has_ospiti` ON prenotazioni.id = prenotazioni_has_ospiti.prenotazione_id
+INNER JOIN `ospiti` ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+WHERE prenotazioni.updated_at BETWEEN '2018-05-01' AND '2018-05-31'
 
 Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
 
-SELECT SUM(pagamenti.price) AS 'somma di tutti i prezzi delle prenotazioni per le stanze del primo piano'
+SELECT stanze.floor, SUM(pagamenti.price) AS 'somma di tutti i prezzi delle prenotazioni per piano'
 FROM `pagamenti`
 INNER JOIN `prenotazioni`
 ON pagamenti.prenotazione_id = prenotazioni.id
 INNER JOIN `stanze`
 ON prenotazioni.stanza_id = stanze.id
-WHERE stanze.floor = 1;
+WHERE stanze.floor = 1
+GROUP BY stanze.floor
 
 Prendi i dati di fatturazione per la prenotazione con id=7
 
@@ -79,8 +89,8 @@ WHERE pagamenti.prenotazione_id = 7;
 
 Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
 
-SELECT stanze.room_number 
+SELECT stanze.room_number AS 'stanze non ancora prenotate'
 FROM `prenotazioni`
 RIGHT JOIN `stanze`
 ON prenotazioni.stanza_id = stanze.id
-WHERE prenotazioni.id IS NULL;
+WHERE prenotazioni.id IS NULL
