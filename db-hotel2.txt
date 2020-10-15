@@ -1,13 +1,18 @@
 Group by
-Conta gli ospiti raggruppandoli per anno di nascita
+#Conta gli ospiti raggruppandoli per anno di nascita
 
+//1
 SELECT COUNT(id) AS 'Ospiti', DATE_FORMAT(`date_of_birth`, '%Y') AS 'Anno'
 FROM `ospiti`
 GROUP BY DATE_FORMAT(`date_of_birth`, '%Y');
+//2
+SELECT COUNT(id) AS 'Ospiti', YEAR(`date_of_birth`) AS 'Anno'
+FROM `ospiti`
+GROUP BY YEAR(`date_of_birth`);
 
-Somma i prezzi dei pagamenti raggruppandoli per status
+#Somma i prezzi dei pagamenti raggruppandoli per status
 
-SELECT `status`, SUM(price)
+SELECT `status`, SUM(price) AS 'totale pagamenti'
 FROM `pagamenti`
 GROUP BY `status`;
 
@@ -25,9 +30,10 @@ GROUP BY DATE_FORMAT(`created_at`, '%H');
 
 Quante prenotazioni ha fatto l’ospite che ha fatto più prenotazioni?
 
-SELECT `pagante_id` AS 'ID Pagante', COUNT(pagante_id) AS 'Numero prenotazioni'
-FROM `pagamenti`
-GROUP BY `pagante_id`;
+SELECT COUNT(`id`) AS `totale prenotazioni`, `ospite_id`
+FROM `prenotazioni_has_ospiti`
+GROUP BY (`ospite_id`)
+ORDER BY `totale prenotazioni` DESC LIMIT 1
 
 Join
 Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
